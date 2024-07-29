@@ -8,6 +8,7 @@
 # About
 Fng-api is an API for [fakenamegenerator.com](https://fakenamegenerator.com). It has all of the features and customizability as the website does. You can specify gender, age, country, and nameset. The API will scrape the website and parse the data for you.
 
+Forket to only include US address with specific Region
 ----
 
 # Usage
@@ -30,47 +31,17 @@ getIdentity(minage=str)
 getIdentity(maxage=str)
 ```
 
-## Country
+## Region
 You must pass a list of all of the countries that you would like the identity to possible have to the country argument. Example: 
 To generate an identity with information for the countries of either the United States or Brazil, you would write this:
 
 ```python
-identity = getIdentity(country=["us", "br"])
+identity = getIdentity(country=["us"])
 ```
 
-Here is a list of all of the country abbreviations:
+Here is a list of all of the region abbreviations:
 
-- au - Australia
-- as - Austria
-- bg - Belgium
-- br - Brazil
-- ca - Canada
-- cyen - Cyprus (Anglicized)
-- cygk - Cyprus (Greek)
-- cz - Czech Republic
-- dk - Denmark
-- ee - Estonia
-- fi - Finland
-- fr - France
-- gr - Germany
-- gl - Greenland
-- hu - Hungary
-- is - Iceland
-- it - Italy
-- nl - Netherlands
-- nz - New Zealand
-- no - Norway
-- pl - Poland
-- pt - Portugal
-- sl - Slovenia
-- za - South Africa
-- sp - Spain
-- sw - Sweden
-- sz - Switzerland
-- tn - Tunisia
-- uk - United Kingdom
-- us - United States
-- uy - Uruguay
+states = ['al', 'ak', 'az', 'ar', 'ca', 'co', 'ct', 'de', 'fl', 'ga', 'hi', 'id', 'il', 'in', 'ia', 'ks', 'ky', 'la', 'me', 'md', 'ma', 'mi', 'mn', 'ms', 'mo', 'mt', 'ne', 'nv', 'nh', 'nj', 'nm', 'ny', 'nc', 'nd', 'oh', 'ok', 'or', 'pa', 'ri', 'sc', 'sd', 'tn', 'tx', 'ut', 'vt', 'va', 'wa', 'dc', 'wv', 'wi', 'wy']
 
 ----
 
@@ -79,46 +50,11 @@ You must pass a list of all of the namesets that you would like the identity to 
 To generate an identity with a name from either a Danish nameset or a French nameset, you would write this:
 
 ```python
-identity = getIdentity(nameset=["dk", "fr"])
+identity = getIdentity(nameset=["us"])
 ```
 Here is a list of all of the nameset abbreviations:
 
 - us - American
-- ar - Arabic
-- au - Australian
-- br - Brazil
-- celat - Chechen (Latin)
-- ch - Chinese
-- zhtw - Traditional Chinese
-- hr - Croatian
-- cs - Czech
-- dk - Danish
-- nl - Dutch
-- en - England/Wales
-- er - Eritrean
-- fi - Finnish
-- fr - French
-- gr - German
-- gl - Greenland
-- sp - Hispanic
-- hobbit - Hobbit
-- hu - Hungarian
-- is - Icelandic
-- ig - Igbo
-- it - Italian
-- jpja - Japanese
-- tlh - Klingon
-- ninja - Ninja
-- no - Norwegian
-- fa - Persian
-- pl - Polish
-- ru - Russian
-- rucyr - Russian (Cyrillic)
-- gd - Scottish
-- sl - Slovenian
-- sw - Swedish
-- th - Thai
-- vn - Vietnamese
 
 ----
 
