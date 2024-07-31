@@ -16,22 +16,12 @@ def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="
         "Pennsylvania": "pa", "Puerto Rico": "pr", "Rhode Island": "ri", "South Carolina": "sc",
         "South Dakota": "sd", "Tennessee": "tn", "Texas": "tx", "Utah": "ut", "US Virgin Islands": "usvi",
         "Vermont": "vt", "Virginia": "va", "Washington": "wa", "West Virginia": "wv", "Wisconsin": "wi",
-        "Wyoming": "wy",
-        # Reverse mapping from abbreviations to full names
-        "al": "Alabama", "ak": "Alaska", "az": "Arizona", "ar": "Arkansas", "ca": "California",
-        "co": "Colorado", "ct": "Connecticut", "de": "Delaware", "dc": "District Of Columbia",
-        "fl": "Florida", "ga": "Georgia", "hi": "Hawaii", "id": "Idaho", "il": "Illinois",
-        "in": "Indiana", "ia": "Iowa", "ks": "Kansas", "ky": "Kentucky", "la": "Louisiana",
-        "me": "Maine", "md": "Maryland", "ma": "Massachusetts", "mi": "Michigan", "mn": "Minnesota",
-        "ms": "Mississippi", "mo": "Missouri", "mt": "Montana", "ne": "Nebraska", "nv": "Nevada",
-        "nh": "New Hampshire", "nj": "New Jersey", "nm": "New Mexico", "ny": "New York",
-        "nc": "North Carolina", "nd": "North Dakota", "oh": "Ohio", "ok": "Oklahoma", "or": "Oregon",
-        "pa": "Pennsylvania", "pr": "Puerto Rico", "ri": "Rhode Island", "sc": "South Carolina",
-        "sd": "South Dakota", "tn": "Tennessee", "tx": "Texas", "ut": "Utah", "usvi": "US Virgin Islands",
-        "vt": "Vermont", "va": "Virginia", "wa": "Washington", "wv": "West Virginia", "wi": "Wisconsin",
-        "wy": "Wyoming"
+        "Wyoming": "wy"
     }
-    
+
+    # Reverse mapping from abbreviations to full names
+    reverse_state_mapping = {v: k for k, v in state_mapping.items()}
+
     # Check if args are valid
     if not isinstance(nameset, list):
         raise TypeError("Argument nameset must be list")
@@ -60,9 +50,13 @@ def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="
     for i in range(len(state)):
         if not isinstance(state[i], str):
             raise TypeError("state values must be a str")
-        # Convert full state name to abbreviation if necessary
-        state[i] = state_mapping.get(state[i].capitalize(), state[i].lower())
-        if state[i] not in state_mapping.values():
+        # Normalize state input
+        normalized_state = state[i].strip().title()
+        if normalized_state in state_mapping:
+            state[i] = state_mapping[normalized_state]
+        elif normalized_state.lower() in reverse_state_mapping:
+            state[i] = normalized_state.lower()
+        else:
             raise ValueError("state \'" + state[i] + "\' not supported")
     
     # Construct URL
@@ -83,7 +77,11 @@ def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="
     address = (fullAddress[0] + ", " + fullAddress[2]).strip()
     street = fullAddress[0].strip()
     city = fullAddress[2].split(", ")[0]
-    state = fullAddress[2].strip().split(" ")[-2]
+    
+    # Extract state and convert abbreviation to full name if necessary
+    state_abbr = fullAddress[2].strip().split(" ")[-2]
+    state = reverse_state_mapping.get(state_abbr.lower(), state_abbr.capitalize())
+    
     zip = fullAddress[2].split(" ")[2]
     motherMaidenName = soup.find("dd").text
     ssn = soup.find_all("dd")[1].text.split(" ")[0]
@@ -159,5 +157,4 @@ def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="
             self.vehicle = vehicle
             self.guid = guid
     
-    iden = identity(name, address, street, city, state, zip, motherMaidenName, ssn, coords, phone, countryCode, birthday, birthdayMonth, birthdayDay, birthdayYear, age, zodiac, email, username, password, website, useragent, card, expiration, cvv2, company, occupation, height, heightcm, weight, weightkg, blood, ups, westernunion, moneygram, color, vehicle, guid)
-    return iden
+    return identity(name, address, street, city, state, zip, motherMaidenName, ssn, coords, phone, countryCode, birthday, birthdayMonth, birthdayDay, birthdayYear, age, zodiac, email, username, password, website, useragent, card, expiration, cvv2, company, occupation, height, heightcm, weight, weightkg, blood, ups, westernunion, moneygram, color, vehicle, guid)
