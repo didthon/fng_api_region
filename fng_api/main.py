@@ -3,10 +3,35 @@ from bs4 import BeautifulSoup
 
 def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="85"):
     
-    namesets = ['us']
-
-    states = ['al', 'ak', 'az', 'ar', 'ca', 'co', 'ct', 'de', 'fl', 'ga', 'hi', 'id', 'il', 'in', 'ia', 'ks', 'ky', 'la', 'me', 'md', 'ma', 'mi', 'mn', 'ms', 'mo', 'mt', 'ne', 'nv', 'nh', 'nj', 'nm', 'ny', 'nc', 'nd', 'oh', 'ok', 'or', 'pa', 'ri', 'sc', 'sd', 'tn', 'tx', 'ut', 'vt', 'va', 'wa', 'dc', 'wv', 'wi', 'wy']
-
+    # State abbreviation and full name mapping
+    state_mapping = {
+        "Alabama": "al", "Alaska": "ak", "Arizona": "az", "Arkansas": "ar", "California": "ca",
+        "Colorado": "co", "Connecticut": "ct", "Delaware": "de", "District Of Columbia": "dc",
+        "Florida": "fl", "Georgia": "ga", "Hawaii": "hi", "Idaho": "id", "Illinois": "il",
+        "Indiana": "in", "Iowa": "ia", "Kansas": "ks", "Kentucky": "ky", "Louisiana": "la",
+        "Maine": "me", "Maryland": "md", "Massachusetts": "ma", "Michigan": "mi", "Minnesota": "mn",
+        "Mississippi": "ms", "Missouri": "mo", "Montana": "mt", "Nebraska": "ne", "Nevada": "nv",
+        "New Hampshire": "nh", "New Jersey": "nj", "New Mexico": "nm", "New York": "ny",
+        "North Carolina": "nc", "North Dakota": "nd", "Ohio": "oh", "Oklahoma": "ok", "Oregon": "or",
+        "Pennsylvania": "pa", "Puerto Rico": "pr", "Rhode Island": "ri", "South Carolina": "sc",
+        "South Dakota": "sd", "Tennessee": "tn", "Texas": "tx", "Utah": "ut", "US Virgin Islands": "usvi",
+        "Vermont": "vt", "Virginia": "va", "Washington": "wa", "West Virginia": "wv", "Wisconsin": "wi",
+        "Wyoming": "wy",
+        # Reverse mapping from abbreviations to full names
+        "al": "Alabama", "ak": "Alaska", "az": "Arizona", "ar": "Arkansas", "ca": "California",
+        "co": "Colorado", "ct": "Connecticut", "de": "Delaware", "dc": "District Of Columbia",
+        "fl": "Florida", "ga": "Georgia", "hi": "Hawaii", "id": "Idaho", "il": "Illinois",
+        "in": "Indiana", "ia": "Iowa", "ks": "Kansas", "ky": "Kentucky", "la": "Louisiana",
+        "me": "Maine", "md": "Maryland", "ma": "Massachusetts", "mi": "Michigan", "mn": "Minnesota",
+        "ms": "Mississippi", "mo": "Missouri", "mt": "Montana", "ne": "Nebraska", "nv": "Nevada",
+        "nh": "New Hampshire", "nj": "New Jersey", "nm": "New Mexico", "ny": "New York",
+        "nc": "North Carolina", "nd": "North Dakota", "oh": "Ohio", "ok": "Oklahoma", "or": "Oregon",
+        "pa": "Pennsylvania", "pr": "Puerto Rico", "ri": "Rhode Island", "sc": "South Carolina",
+        "sd": "South Dakota", "tn": "Tennessee", "tx": "Texas", "ut": "Utah", "usvi": "US Virgin Islands",
+        "vt": "Vermont", "va": "Virginia", "wa": "Washington", "wv": "West Virginia", "wi": "Wisconsin",
+        "wy": "Wyoming"
+    }
+    
     # Check if args are valid
     if not isinstance(nameset, list):
         raise TypeError("Argument nameset must be list")
@@ -30,15 +55,15 @@ def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="
         raise ValueError("minage must be less than maxage")
     
     for i in range(len(nameset)):
-        if not nameset[i] in namesets:
-            raise ValueError("nameset \'" + nameset[i] + "\' not supported")
-        elif not isinstance(nameset[i], str):
+        if not isinstance(nameset[i], str):
             raise TypeError("nameset values must be a str")
     for i in range(len(state)):
-        if not state[i] in states:
-            raise ValueError("state \'" + state[i] + "\' not supported")
-        elif not isinstance(state[i], str):
+        if not isinstance(state[i], str):
             raise TypeError("state values must be a str")
+        # Convert full state name to abbreviation if necessary
+        state[i] = state_mapping.get(state[i].capitalize(), state[i].lower())
+        if state[i] not in state_mapping.values():
+            raise ValueError("state \'" + state[i] + "\' not supported")
     
     # Construct URL
     url = "https://www.fakenamegenerator.com/advanced.php?t=region"
