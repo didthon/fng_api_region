@@ -83,7 +83,7 @@ def getIdentity(nameset=["us"], state=["tx"], gender="50", minage="19", maxage="
     address = (fullAddress[0] + ", " + fullAddress[2]).strip()
     street = fullAddress[0].strip()
     city = fullAddress[2].split(", ")[0]
-    state = fullAddress[2].split(" ")[1]
+    state = fullAddress[2].strip().split(" ")[-2]
     zip = fullAddress[2].split(" ")[2]
     motherMaidenName = soup.find("dd").text
     ssn = soup.find_all("dd")[1].text.split(" ")[0]
